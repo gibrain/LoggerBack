@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="https://logging.apache.org/xml/ns"
+	xsi:schemaLocation="
+                       https://logging.apache.org/xml/ns
+                       https://logging.apache.org/xml/ns/log4j-config-2.xsd"
+	status="DEBUG">
+	<!-- Appender de Consola -->
+	<Appenders>
+
+		<!-- Appender de Archivo -->
+		<RollingFile name="File"
+			fileName="${sys:jboss.server.log.dir}/loggerBack.log"
+			filePattern="${sys:jboss.server.log.dir}/loggerBack-%d{yyyy-MM-dd}.log">
+			<PatternLayout
+				pattern='{"log_data":{"fecha":"%d{yyyy-MM-dd HH:mm:ss}","Level":"%p","Mensaje":"%m%n","servicios":[ "%C.%M %L (%t)" ],"TiempoTotal": %X{TiempoTotal}}}%n' />
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+			</Policies>
+		</RollingFile>
+
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern='{"log_data":{"fecha":"%d{yyyy-MM-dd HH:mm:ss}","Level":"%p","Mensaje":"%m%n","servicios":[ "%C.%M %L (%t)" ],"TiempoTotal": %X{TiempoTotal}}}%n' />
+		</Console>
+
+
+
+	</Appenders>
+
+	<!-- Configuración del root logger -->
+	<Loggers>
+	    <!-- Logger específico para tu aplicación -->
+        
+		<Root level="INFO" >
+			<AppenderRef ref="File" />
+			<AppenderRef ref="Console" />
+		</Root>
+
+		<!-- Configuración del logger para Quartz -->
+
+		<!-- Configuración de un logger específico para log4j -->
+		<Logger name="org.apache.log4j" level="ERROR">
+			<AppenderRef ref="File" />
+		</Logger>
+	</Loggers>
+</Configuration>
